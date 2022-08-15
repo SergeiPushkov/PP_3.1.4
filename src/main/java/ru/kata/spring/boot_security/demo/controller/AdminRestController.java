@@ -24,6 +24,7 @@ public class AdminRestController {
     @GetMapping("/user")
     public ResponseEntity<User> sayUsers(Principal principal) {
         return new ResponseEntity<>(userServiceImp.findByUsername(principal.getName()),HttpStatus.OK);
+
     }
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
