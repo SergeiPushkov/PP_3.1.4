@@ -11,7 +11,6 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,22 +30,20 @@ public class UserServiceImp implements UserService {
         this.roleRepository = roleRepository;
 
     }
-
+    @Override
     public User findById(Long id) {
         return userRepository.getById(id);
     }
 
 
-
+    @Override
     public List<User> findAll(){
-        return new ArrayList<>(userRepository.findAll());
+        return userRepository.findAll();
     }
 
-
+    @Override
     @Transactional
     public void saveUser(User user) {
-        Set<Role> roles = findByRoleName(user.getRoles().toString());
-        user.setRoles(roles);
         if(user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -56,30 +53,29 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void update(User upUser) {
-        Set<Role> roles = findByRoleName(upUser.getRoles().toString());
-        if(upUser.getRoles().toString().contains("ROLE_ADMIN")){
-            upUser.setRoles(getAllRoles());
-        } else {
-            upUser.setRoles(roles);
-        }
         if(upUser.getPassword() != null) {
-            upUser.setPassword(upUser.getPassword());
+            if(upUser.getPassword().equals(userRepository.getById(upUser.getId()).getPassword())) {
+                upUser.setPassword(upUser.getPassword());
+            } else {
+                upUser.setPassword(passwordEncoder.encode(upUser.getPassword()));
+            }
         }
         userRepository.save(upUser);
     }
 
+    @Override
     public void deleteById(long id) {
         userRepository.deleteById(id);
     }
 
-
+    @Override
     public User findByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
-
-    public Set<Role> getAllRoles() {
-        return new HashSet<>(roleRepository.findAll());
+    @Override
+    public List<Role> getAllRoles() {
+        return new ArrayList<>(roleRepository.findAll());
     }
 
 
@@ -97,13 +93,11 @@ public class UserServiceImp implements UserService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = findByUsername(email);
         if (user == null) {
             throw new UsernameNotFoundException("Not found user");
         }
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                user.getAuthorities());
+        return user;
     }
 }

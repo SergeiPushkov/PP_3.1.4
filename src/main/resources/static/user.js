@@ -1,4 +1,4 @@
-const Url = "http://localhost:8080/api/user"
+const Url = "http://localhost:8080/user/info"
 
 const postsUserList = document.getElementById("dataUser");// get list by class
 

@@ -23,9 +23,7 @@ public interface UserService extends UserDetailsService {
 
     Set<Role> findByRoleName(String role);
 
-    Set<Role> getAllRoles();
+    List<Role> getAllRoles();
 
     void update(User upUser);
-
-
 }

@@ -3,29 +3,34 @@ const password = document.getElementById('new-password')
 const age = document.getElementById('new-age')
 const email = document.getElementById('new-eMail')
 const addForm = document.querySelector('.addForm')
-const formDataNewUser = new FormData(addForm);
+
+
 
 let currentRoleNew = [];
 
 addForm.addEventListener('submit', e => {
-    const formDataNewUser = new FormData(addForm);
-    formDataNewUser.forEach((value, key) =>
-        {
-            if(key === "new-Role") {
-                currentRoleNew.push({name:value})
-                console.log(value)
-                console.log(value)
-                console.log(currentRoleNew)
-                console.log(currentRoleNew)
-
-            }
-            console.log(key,value)
+    let addRole = document.getElementById('new-Role').value
+    listRoles.forEach((role) => {
+        if (role.id.toString() === addRole) {
+            console.log("прошло")
+            currentRoleNew.push(role)
         }
-    )
+    })
+    // const formDataNewUser = new FormData(addForm);
+    // formDataNewUser.forEach((value, key) =>
+    //     {
+    //         if(key === "new-Role") {
+    //             if(value === "ROLE_ADMIN") {
+    //                 currentRoleNew.push({id:1,name:value})
+    //             } else {
+    //                 currentRoleNew.push({id:2,name:value})
+    //             }
+    //         }
+    //     }
+    // )
     e.preventDefault();
 
-    console.log('Form submitted');
-    console.log(currentRoleNew)
+
 
     fetch("/api/users/new", {
         method: 'POST',
@@ -41,6 +46,7 @@ addForm.addEventListener('submit', e => {
         })
     }).then(()=> reStart())
         .then(() => addForm.reset())
-
+    currentRoleNew.length = 0;
     return show('showUsers','addUser')
 })
+

@@ -16,4 +16,5 @@ editModal.addEventListener('show.bs.modal', function (event) {
     modalBodyInputPassword.value = user_password
     modalBodyInputAge.value = user_age
     modalBodyInputEmail.value = user_email
+
 })

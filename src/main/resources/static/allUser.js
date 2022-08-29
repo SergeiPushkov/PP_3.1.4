@@ -24,7 +24,8 @@ const createPost = (user, roles) =>
                 data-bs-username="${user.username}"
                 data-bs-password="${user.password}"
                 data-bs-age="${user.age}"
-                data-bs-email="${user.email}">Edit
+                data-bs-email="${user.email}"  
+                data-bs-role="${user.role}">Edit    
             </button>
         </td>
         <td>
@@ -34,7 +35,8 @@ const createPost = (user, roles) =>
                 data-bs-id="${user.id}"
                 data-bs-username="${user.username}"
                 data-bs-age="${user.age}"
-                data-bs-email="${user.email}">Delete
+                data-bs-email="${user.email}"
+                data-bs-role="${user.role}">Delete
             </button>
         </td>
     </tr> 
@@ -42,10 +44,7 @@ const createPost = (user, roles) =>
 // заполняем таблицу
 const fillPostsList = (users) => {
     postsList.innerHTML = "";
-
     let roles;
-
-    console.log("--------------------------" + users.length + "--------------------------------")
 
     if (users.length) {
         users.forEach((user) => {
@@ -54,6 +53,7 @@ const fillPostsList = (users) => {
                 roles += user.name + ' '
             })
             postsList.innerHTML += createPost(user, roles)
+
         });
     }
 }
@@ -82,5 +82,4 @@ async function reStart() {
     state.users.length = 0;
     await getPostsRequest();
     fillPostsList(state.users);
-    console.log("RESTART OK")
 }

@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImp;
-
-import java.security.Principal;
 import java.util.List;
+
 
 
 @RestController
@@ -19,33 +19,31 @@ public class AdminRestController {
     public AdminRestController(UserServiceImp userServiceImp) {
         this.userServiceImp = userServiceImp;
     }
-
-
-    @GetMapping("/user")
-    public ResponseEntity<User> sayUsers(Principal principal) {
-        return new ResponseEntity<>(userServiceImp.findByUsername(principal.getName()),HttpStatus.OK);
-
+    @GetMapping("/users/role")
+    public ResponseEntity<List<Role>> getRole() {
+        return ResponseEntity.ok().body(userServiceImp.getAllRoles());
     }
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<>(userServiceImp.findAll(), HttpStatus.OK);
+        return  ResponseEntity.ok().body(userServiceImp.findAll());
     }
 
     @GetMapping("/users/get/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(userServiceImp.findById(id),HttpStatus.OK);
+        return ResponseEntity.ok().body(userServiceImp.findById(id));
     }
 
     @PutMapping("/users/edit")
     public ResponseEntity<User> editUser(@RequestBody User user) {
         userServiceImp.update(user);
-       return new ResponseEntity<>(user,HttpStatus.OK);
+       return ResponseEntity.ok().body(user);
     }
 
     @PostMapping("/users/new")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         userServiceImp.saveUser(user);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        return ResponseEntity.ok().body(user);
     }
 
     @DeleteMapping("/users/delete/{id}")
@@ -53,5 +51,4 @@ public class AdminRestController {
         userServiceImp.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
